@@ -11,7 +11,6 @@ import static io.restassured.http.ContentType.JSON;
 
 public class CreateSpec {
     public static final RequestSpecification requestSpec = with()
-            .relaxedHTTPSValidation()
             .filter(withCustomTemplates())
             .contentType(JSON)
             .log().all();
