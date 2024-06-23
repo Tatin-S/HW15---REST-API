@@ -1,5 +1,21 @@
 plugins {
     id 'java-library'
+    id 'io.qameta.allure' version '2.11.2'
+    id "io.freefair.lombok" version "8.6"
+}
+
+allure {
+    report {
+        version.set("2.27.0")
+    }
+    adapter {
+        aspectjWeaver.set(true)
+        frameworks {
+            junit5 {
+                adapterVersion.set("2.27.0")
+            }
+        }
+    }
 }
 
 repositories {
@@ -13,12 +29,24 @@ compileTestJava {
 
 dependencies {
     testImplementation(
+            "com.codeborne:selenide:7.2.3",
+            "org.junit.jupiter:junit-jupiter:5.10.2",
+            'org.slf4j:slf4j-simple:2.0.13',
             'io.rest-assured:rest-assured:5.3.1',
-            "org.junit.jupiter:junit-jupiter:5.10.0",
-            'org.slf4j:slf4j-simple:2.0.7'
+            "io.rest-assured:json-schema-validator:5.3.1",
+            "io.qameta.allure:allure-rest-assured:2.27.0",
+            'org.assertj:assertj-core:3.26.0'
     )
+    runtimeOnly 'org.aspectj:aspectjweaver:1.9.22.1'
 }
 
-test {
+tasks.withType(Test) {
     useJUnitPlatform()
+
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
 }
